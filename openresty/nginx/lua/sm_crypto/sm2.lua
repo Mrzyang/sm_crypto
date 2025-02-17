@@ -15,8 +15,8 @@ sfJjNNf5jyB7m9EVuiz0RpQqNfEk2PP1EpC40stZ351d6cYida6BGT7u
 ]]
 
 local priv_key, err = pkey.new(priv_key_pem, {
-     type = "pr",
-    format = "PEM",
+    type = "pr",
+    format = "PEM"
 })
 if not priv_key then
     ngx.say("Failed to load private key: ", err)
@@ -28,6 +28,7 @@ local data = "hello"
 
 -- 计算数据的 SM3 哈希值
 local hashed = digest.new("sm3"):final(data)
+ngx.say("sm3_hashed:" .. ngx.encode_base64(hashed))
 
 -- 使用私钥对哈希值进行签名
 local sig, err = priv_key:sign(hashed, "sm3")
@@ -46,7 +47,6 @@ MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEnjL7kVcmkRRZBQpK0xxKNsairyM6
 d7HyYzTX+Y8ge5vRFbos9EaUKjXxJNjz9RKQuNLLWd+dXenGInWugRk+7g==
 -----END PUBLIC KEY-----
 ]]
-
 
 local pub_key, err = pkey.new(pub_key_pem, {
     format = "PEM",
