@@ -595,10 +595,10 @@ function _M.new(s, opts)
 
   ffi_gc(ctx, C.EVP_PKEY_free)
   local key_type = OPENSSL_3X and C.EVP_PKEY_get_base_id(ctx) or C.EVP_PKEY_base_id(ctx)
-  -- 2025-02-16 mrzyang个人修改了，不然sm2签名验签一直跑不通，报错
-  -- if key_type == 0 then
-  --   return nil, "pkey.new: cannot get key_type"
-  -- end
+  -- 2025-02-16 mrzyang  这里用openssl-3.4.1时C.EVP_PKEY_base_id(ctx)会出现异常，导致无法识别sm2公私钥，用Tongsuo-8.4.0替代openssl时，不会出现该问题，该模块的作者反馈是openssl的bug。如果不退换成Tongsuo-8.4.0，为避免识别sm2公私钥报错，就临时注释掉以下三行if条件判断。
+  if key_type == 0 then
+    return nil, "pkey.new: cannot get key_type"
+  end
   local key_type_is_ecx = (key_type == evp_macro.EVP_PKEY_ED25519) or
                           (key_type == evp_macro.EVP_PKEY_X25519) or
                           (key_type == evp_macro.EVP_PKEY_ED448) or
