@@ -17,6 +17,10 @@ app.get('/project01/user/list', (req, res) => {
     res.send('the path is /project01/user/list');
 });
 
+app.get('/api/test/hello', (req, res) => {
+    res.send('hello');
+});
+
 // 设定端口
 const PORT = 3000;
 
