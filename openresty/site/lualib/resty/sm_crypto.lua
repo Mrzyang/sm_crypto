@@ -11,7 +11,6 @@ end
 -- SM2 签名，这里PEM格式的私钥，前面-----BEGIN PRIVATE KEY-----以及-----END PRIVATE KEY-----千万不能留空格和制表符，否则无法识别和加载
 function M.sign(data, sm2_private_key_pem)
     local pkey = require "resty.openssl.pkey"
-    local digest = require "resty.openssl.digest"
 
     local priv_key, err = pkey.new(sm2_private_key_pem, {
         type = "pr",
@@ -22,11 +21,8 @@ function M.sign(data, sm2_private_key_pem)
         return nil
     end
 
-    -- 计算数据的 SM3 哈希值
-    local hashed = digest.new("sm3"):final(data)
-
     -- 使用私钥对哈希值进行签名
-    local signature, err = priv_key:sign(hashed, "sm3")
+    local signature, err = priv_key:sign(data, "sm3")
     if not signature then
         ngx.log(ngx.ERR, "Failed to sign data: " .. err)
         return nil

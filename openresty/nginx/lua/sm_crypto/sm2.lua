@@ -1,5 +1,4 @@
 local pkey = require "resty.openssl.pkey"
-local digest = require "resty.openssl.digest"
 
 ngx.header.content_type = "text/html; charset=utf-8"
 -- 设置响应状态码为 200
@@ -26,12 +25,8 @@ end
 -- 要签名的数据
 local data = "hello"
 
--- 计算数据的 SM3 哈希值
-local hashed = digest.new("sm3"):final(data)
-ngx.say("sm3_hashed:" .. ngx.encode_base64(hashed))
-
 -- 使用私钥对哈希值进行签名
-local sig, err = priv_key:sign(hashed, "sm3")
+local sig, err = priv_key:sign(data, "sm3")
 if not sig then
     ngx.say("Failed to sign data: ", err)
     return
@@ -59,7 +54,7 @@ if not pub_key then
 end
 
 -- 使用公钥验证签名
-local is_valid, err = pub_key:verify(sig, hashed, "sm3")
+local is_valid, err = pub_key:verify(sig, data, "sm3")
 if not is_valid then
     ngx.say("Signature is invalid: ", err)
     return

@@ -11,7 +11,7 @@ local function sign_direct(sm3_hashed, sm2_private_key_pem)
     end
 
     -- 使用私钥对哈希值进行签名
-    local signature, err = priv_key:sign(sm3_hashed, "sm3")
+    local signature, err = priv_key:sign(sm3_hashed)
     if not signature then
         ngx.log(ngx.ERR, "Failed to sign data: " .. err)
         return nil
