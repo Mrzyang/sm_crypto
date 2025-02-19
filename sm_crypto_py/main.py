@@ -2,7 +2,7 @@ from gmssl import sm2, sm3, func
 from gmssl.sm4 import CryptSM4, SM4_ENCRYPT, SM4_DECRYPT
 import gmalg
 # https://github.com/py-gmssl/py-gmssl 这个项目用的人多，推荐
-# https://github.com/ww-rm/gmalg 这里仅仅提取了sm2公司钥生成算法
+# https://github.com/ww-rm/gmalg 这里仅仅提取了sm2公私钥生成算法
 # 当你生成 SM2 公钥时，如果它显示为 130 个十六进制字符，这通常是因为你使用的是 非压缩公钥格式，而 SM2 的公钥通常包含了压缩格式和非压缩格式两种表示方式。
 #
 # 1. 非压缩公钥格式
@@ -32,8 +32,6 @@ sm2_private_key = sk.hex()
 sm2_public_key = pk.hex()
 print("sm2私钥：",sm2_private_key)
 print("sm2公钥：",sm2_public_key)
-private_key = sk.hex()
-public_key = pk.hex()
 sm2_crypt = sm2.CryptSM2(
     public_key=sm2_public_key, private_key=sm2_private_key)
 # 对接java 时验签失败可以使用
